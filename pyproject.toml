@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ytpipe"
+version = "0.1.0"
+description = "유튜브 스크립트 초안을 만들고 avoid-ai-writing 규칙으로 다듬는다"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[project.scripts]
+ytpipe = "ytpipe.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ytpipe*"]
