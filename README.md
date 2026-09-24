@@ -24,10 +24,11 @@ YTPIPE_MODEL=gpt-4o
 
 ```bash
 ytpipe check
-ytpipe run --brief briefs/example.md --lang en
-ytpipe run --topic "How FAA Opspec A134 is changing pilot hiring forever" --minutes 9 --lang en
+ytpipe run --brief briefs/example.md --lang en # example.md 파일을 작성해 기본적 틀을 잡아주어야함
+ytpipe run --topic "How FAA Opspec A134 is changing pilot hiring forever" --minutes 9 --lang en # 주제만 가지고 draft 만들고 싶은 경우 
 ytpipe run --stage humanize --draft output/실행시각/draft.md --lang en
 ytpipe narrate --confirmed output/실행시각/final.md --lang en
+ytpipe footage --script output/실행시각/narration.md
 ```
 
 `--lang ko`는 한국어, `--lang en`은 영어다. 생략하면 브리프의 `언어`를 쓰고, 그것도 없으면 한국어다. 섹션 제목은 구조 문서 그대로 두고, 제목 후보와 대사만 그 언어로 쓴다.
@@ -50,6 +51,8 @@ ytpipe narrate --confirmed output/실행시각/final.md --lang en
 - `narration.md`: 다듬기 규칙을 적용한 낭독 대본
 
 컨펌 원고의 섹션이 대본에서 빠지거나 순서가 바뀌면 파일을 지우지 않고, 터미널에 `확인 필요`로 알린다.
+
+`footage`는 대본의 각 구간에 맞는 Pexels 영상을 받아 `output/실행시각/footage/`에 저장한다. `.env`의 `PEXELS_API_KEY`가 필요하다. 같은 폴더의 `brief.md`가 있으면 검색어를 고를 때 함께 본다. 받은 파일과 출처는 `footage.md`에 적힌다.
 
 ## 구조를 학습시키는 방법
 

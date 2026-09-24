@@ -21,6 +21,7 @@ from ytpipe.loaders import (
     required_sections,
 )
 from ytpipe.language import apply_language, language_name, resolve_lang
+from ytpipe.footage import collect_footage
 from ytpipe.pipeline import build_brief, narrate, run
 
 
@@ -204,7 +205,21 @@ def build_parser() -> argparse.ArgumentParser:
         help="대본 언어. ko는 한국어, en은 영어. 없으면 브리프의 언어, 그것도 없으면 ko",
     )
     narrate_parser.set_defaults(func=_cmd_narrate)
+
+    footage_parser = sub.add_parser("footage", help="완성 대본 구간마다 자료화면을 받아 온다")
+    footage_parser.add_argument("--script", required=True, help="완성 대본 또는 컨펌 원고 경로")
+    footage_parser.set_defaults(func=_cmd_footage)
     return parser
+
+
+def _cmd_footage(args: argparse.Namespace) -> int:
+    path = Path(args.script)
+    if not path.is_file():
+        raise SystemExit(f"대본 파일이 없다: {path}")
+    destination = collect_footage(path)
+    print(f"저장: {destination}")
+    print(f"목록: {destination / 'footage.md'}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -215,7 +230,7 @@ def main(argv: list[str] | None = None) -> int:
         return args.func(args)
     except Exception as error:
         name = type(error).__name__
-        if name in {"LLMError", "SourceError", "ValueError"}:
+        if name in {"LLMError", "SourceError", "ValueError", "FootageError"}:
             print(str(error), file=sys.stderr)
             return 1
         raise
